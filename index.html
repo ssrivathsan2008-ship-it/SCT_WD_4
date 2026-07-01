@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZenTodo — Organize Your Life, Elegantly</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Sidebar for Lists and Collections -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="24" height="24" rx="6" fill="url(#logo-grad)"/>
+            <path d="M7.5 12L10.5 15L16.5 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="logo-grad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#8B5CF6"/>
+                <stop offset="1" stop-color="#3B82F6"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <h1>ZenTodo</h1>
+        </div>
+      </div>
+      
+      <div class="sidebar-content">
+        <div class="sidebar-section">
+          <h2>My Lists</h2>
+          <ul class="lists-container" id="lists-container">
+            <!-- Dynamically populated lists -->
+          </ul>
+        </div>
+      </div>
+      
+      <div class="sidebar-footer">
+        <form id="new-list-form" class="new-list-form">
+          <input type="text" id="new-list-input" placeholder="Create new list..." maxlength="20" required autocomplete="off">
+          <button type="submit" aria-label="Add List" class="add-list-btn">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top header bar: Stats, search, list name -->
+      <header class="main-header">
+        <div class="header-title-section">
+          <h2 id="active-list-title">My Tasks</h2>
+          <div class="progress-container">
+            <span class="progress-label" id="progress-text">0 of 0 completed</span>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="header-controls">
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="search-input" placeholder="Search tasks..." autocomplete="off">
+          </div>
+          <button class="delete-list-btn" id="delete-list-btn" title="Delete current list">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Task Operations & Input Dashboard -->
+      <section class="task-dashboard">
+        <!-- New Task Form -->
+        <form id="new-task-form" class="new-task-form">
+          <div class="form-row-primary">
+            <input type="text" id="task-title-input" placeholder="What is your next focus?" required autocomplete="off">
+            <button type="submit" class="submit-task-btn">
+              <span>Add Task</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+          
+          <div class="form-row-secondary">
+            <!-- Date & Time picker -->
+            <div class="input-group">
+              <label for="task-datetime-input">Due Date & Time</label>
+              <input type="datetime-local" id="task-datetime-input">
+            </div>
+
+            <!-- Priority -->
+            <div class="input-group">
+              <label>Priority</label>
+              <div class="priority-selector">
+                <label class="priority-option low">
+                  <input type="radio" name="priority" value="low" checked>
+                  <span>Low</span>
+                </label>
+                <label class="priority-option medium">
+                  <input type="radio" name="priority" value="medium">
+                  <span>Medium</span>
+                </label>
+                <label class="priority-option high">
+                  <input type="radio" name="priority" value="high">
+                  <span>High</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <!-- Filters and Sorting Options -->
+        <div class="filter-sort-bar">
+          <div class="filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="active">Active</button>
+            <button class="filter-btn" data-filter="completed">Completed</button>
+          </div>
+          
+          <div class="sort-selector">
+            <label for="sort-select">Sort by</label>
+            <select id="sort-select">
+              <option value="none">Default</option>
+              <option value="date-asc">Due Date (Soonest)</option>
+              <option value="date-desc">Due Date (Latest)</option>
+              <option value="priority-desc">Priority (High to Low)</option>
+              <option value="alphabetical-asc">Title (A-Z)</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Task Lists Display -->
+      <section class="tasks-display">
+        <!-- Active / Uncompleted Tasks -->
+        <div class="tasks-section">
+          <div class="tasks-list" id="active-tasks-list">
+            <!-- Dynamic Active Tasks -->
+          </div>
+        </div>
+
+        <!-- Completed Tasks (with Toggle collapse for premium clean look) -->
+        <div class="tasks-section completed-section hidden" id="completed-section">
+          <button class="completed-toggle-btn" id="completed-toggle-btn">
+            <span>Completed (<span id="completed-count">0</span>)</span>
+            <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="tasks-list collapsed" id="completed-tasks-list">
+            <!-- Dynamic Completed Tasks -->
+          </div>
+        </div>
+
+        <!-- Empty State Placeholder -->
+        <div class="empty-state" id="empty-state">
+          <div class="empty-state-illustration">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <h3>All calm here</h3>
+          <p>No tasks found. Create a new task above or select another list to get started!</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Edit Task Modal Overlay -->
+  <div class="modal-overlay" id="edit-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Edit Task</h3>
+        <button class="close-modal-btn" id="close-modal-btn">&times;</button>
+      </div>
+      <form id="edit-task-form">
+        <input type="hidden" id="edit-task-id">
+        <div class="form-group">
+          <label for="edit-task-title">Title</label>
+          <input type="text" id="edit-task-title" required autocomplete="off">
+        </div>
+        
+        <div class="form-group">
+          <label for="edit-task-datetime">Due Date & Time</label>
+          <input type="datetime-local" id="edit-task-datetime">
+        </div>
+
+        <div class="form-group">
+          <label>Priority</label>
+          <div class="priority-selector">
+            <label class="priority-option edit-low">
+              <input type="radio" name="edit-priority" value="low" id="edit-prio-low">
+              <span>Low</span>
+            </label>
+            <label class="priority-option edit-medium">
+              <input type="radio" name="edit-priority" value="medium" id="edit-prio-med">
+              <span>Medium</span>
+            </label>
+            <label class="priority-option edit-high">
+              <input type="radio" name="edit-priority" value="high" id="edit-prio-high">
+              <span>High</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="edit-task-list">Move to List</label>
+          <select id="edit-task-list">
+            <!-- Dynamically populated options of lists -->
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancel-edit-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
